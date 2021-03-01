@@ -35,7 +35,7 @@ allprojects {
 
 ```gradle
 dependencies {
-    implementation 'com.github.turing-tech:MaterialScrollBar:13.+'
+    implementation 'com.github.grchen2018:MaterialScrollBar:13.4.2'
 }
 ```
 ## Documentation
