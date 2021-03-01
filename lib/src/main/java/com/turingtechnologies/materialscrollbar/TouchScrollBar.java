@@ -20,11 +20,12 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Handler;
 import android.os.Looper;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 public class TouchScrollBar extends MaterialScrollBar<TouchScrollBar> {
 
@@ -54,8 +55,8 @@ public class TouchScrollBar extends MaterialScrollBar<TouchScrollBar> {
     }
 
     @Override
-    void setUpProps(Context context, AttributeSet attributes) {
-        super.setUpProps(context, attributes);
+    void setUpProps(TypedArray a, Context context, AttributeSet attributes) {
+        super.setUpProps(a, context, attributes);
         flavourAttributes = context.getTheme().obtainStyledAttributes(
                 attributes, R.styleable.TouchScrollBar, 0, 0);
     }

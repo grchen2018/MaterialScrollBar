@@ -24,13 +24,6 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
-import androidx.annotation.ColorInt;
-import androidx.annotation.ColorRes;
-import androidx.core.content.ContextCompat;
-import androidx.core.view.ViewCompat;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.MotionEvent;
@@ -39,6 +32,14 @@ import android.view.ViewParent;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.RelativeLayout;
+
+import androidx.annotation.ColorInt;
+import androidx.annotation.ColorRes;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.ViewCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import java.util.ArrayList;
 
@@ -77,7 +78,6 @@ public abstract class MaterialScrollBar<T> extends RelativeLayout {
     protected boolean hidden = true;
     private int textColor = ContextCompat.getColor(getContext(), android.R.color.white);
     private boolean lightOnTouch;
-    private TypedArray a; //XML attributes
     private Boolean rtl = false;
     boolean hiddenByUser = false;
     private boolean hiddenByNotEnoughElements = false;
@@ -125,21 +125,24 @@ public abstract class MaterialScrollBar<T> extends RelativeLayout {
     MaterialScrollBar(Context context, AttributeSet attributeSet, int defStyle) {
         super(context, attributeSet, defStyle);
 
+        TypedArray typedArray = context.getTheme().obtainStyledAttributes(
+                attributeSet,
+                R.styleable.MaterialScrollBar,
+                0, 0);
         setRightToLeft(Utils.isRightToLeft(context)); //Detects and applies the Right-To-Left status of the app
 
-        setUpProps(context, attributeSet); //Discovers and applies some XML attributes
+        setUpProps(typedArray, context, attributeSet); //Discovers and applies some XML attributes
 
         addView(setUpHandleTrack(context)); //Adds the handle track
-        addView(setUpHandle(context, a.getBoolean(R.styleable.MaterialScrollBar_msb_lightOnTouch, true))); //Adds the handle
+        addView(setUpHandle(context, typedArray.getBoolean(R.styleable.MaterialScrollBar_msb_lightOnTouch, true))); //Adds the handle
+
+        implementPreferences(typedArray);
+
+        typedArray.recycle();
     }
 
     //Unpacks XML attributes and ensures that no mandatory attributes are missing, then applies them.
-    void setUpProps(Context context, AttributeSet attributes) {
-        a = context.getTheme().obtainStyledAttributes(
-                attributes,
-                R.styleable.MaterialScrollBar,
-                0, 0);
-
+    void setUpProps(TypedArray a, Context context, AttributeSet attributes) {
         if(!a.hasValue(R.styleable.MaterialScrollBar_msb_lightOnTouch)) {
             throw new IllegalStateException(
                     "You are missing the following required attributes from a scroll bar in your XML: lightOnTouch");
@@ -185,7 +188,7 @@ public abstract class MaterialScrollBar<T> extends RelativeLayout {
     }
 
     //Implements optional attributes.
-    void implementPreferences() {
+    void implementPreferences(TypedArray a) {
         if(a.hasValue(R.styleable.MaterialScrollBar_msb_barColor)) {
             setBarColor(a.getColor(R.styleable.MaterialScrollBar_msb_barColor, 0));
         }
@@ -234,14 +237,17 @@ public abstract class MaterialScrollBar<T> extends RelativeLayout {
             } catch (ClassCastException e) {
                 throw new RuntimeException("The id given for the recyclerView did not refer to a RecyclerView", e);
             }
-            implementPreferences();
 
             implementFlavourPreferences();
 
-            a.recycle();
-
             generalSetup();
         }
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        attached = false;
     }
 
     //General setup.
