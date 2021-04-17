@@ -16,11 +16,12 @@
 
 package com.turingtechnologies.materialscrollbar;
 
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 /*
  * Lots of complicated maths taken mostly from Google.
@@ -134,9 +135,7 @@ class ScrollingUtilities {
                         -(exactItemPos % scrollPosState.rowHeight));
             } catch (ArithmeticException e) { /* Avoids issues where children of RV have not yet been laid out */ }
         } else {
-            if(layoutManager == null) {
-                layoutManager = ((LinearLayoutManager) materialScrollBar.recyclerView.getLayoutManager());
-            }
+            layoutManager = ((LinearLayoutManager) materialScrollBar.recyclerView.getLayoutManager());
             exactItemPos = customScroller.getItemIndexForScroll(touchFraction);
             int offset = (int) (customScroller.getDepthForItem(exactItemPos) - touchFraction * getAvailableScrollHeight());
             layoutManager.scrollToPositionWithOffset(exactItemPos, offset);
