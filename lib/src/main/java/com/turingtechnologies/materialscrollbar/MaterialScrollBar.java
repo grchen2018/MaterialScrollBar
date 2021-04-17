@@ -207,6 +207,9 @@ public abstract class MaterialScrollBar<T> extends RelativeLayout {
         if(a.hasValue(R.styleable.MaterialScrollBar_msb_rightToLeft)) {
             setRightToLeft(a.getBoolean(R.styleable.MaterialScrollBar_msb_rightToLeft, false));
         }
+        if(a.hasValue(R.styleable.MaterialScrollBar_msb_handleRadius)) {
+            setRadius(a.getDimensionPixelSize(R.styleable.MaterialScrollBar_msb_handleRadius, 0));
+        }
     }
 
     public T setRecyclerView(RecyclerView rv) {
@@ -656,6 +659,12 @@ public abstract class MaterialScrollBar<T> extends RelativeLayout {
         if(indicator != null) {
             indicator.setRTL(rtl);
             indicator.setLayoutParams(indicator.refreshMargins((LayoutParams) indicator.getLayoutParams()));
+        }
+    }
+
+    public void setRadius(float radius){
+        if (handleThumb != null) {
+            handleThumb.setRadius(radius);
         }
     }
 

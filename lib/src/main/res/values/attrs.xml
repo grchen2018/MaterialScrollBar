@@ -21,6 +21,7 @@
         <attr name="msb_recyclerView" format="reference"/>
         <attr name="msb_lightOnTouch" format="boolean|reference"/>
         <attr name="msb_handleColor" format="color|reference"/>
+        <attr name="msb_handleRadius" format="dimension|reference"/>
         <attr name="msb_barColor" format="color|reference"/>
         <attr name="msb_handleOffColor" format="color|reference"/>
         <attr name="msb_textColor" format="color|reference"/>

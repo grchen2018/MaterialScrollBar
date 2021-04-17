@@ -34,16 +34,21 @@ public class Handle extends View {
     Integer mode;
     boolean expanded = false;
     Boolean rtl = false;
+    float radius = 0f;
 
     public Handle(Context c, int m) {
         super(c);
 
         mode = m;
         p.setFlags(Paint.ANTI_ALIAS_FLAG);
-}
+    }
 
     void setRightToLeft(boolean rtl) {
         this.rtl = rtl;
+    }
+
+    public void setRadius(float radius) {
+        this.radius = radius;
     }
 
     @Override
@@ -104,7 +109,7 @@ public class Handle extends View {
             canvas.drawRect(handleHold, p);
             canvas.drawArc(handleArc, rtl ? 270F : 90F, 180F, false, p); //335
         } else {
-            canvas.drawRect(handleHold, p);
+            canvas.drawRoundRect(handleHold, radius, radius, p);
         }
     }
 }
