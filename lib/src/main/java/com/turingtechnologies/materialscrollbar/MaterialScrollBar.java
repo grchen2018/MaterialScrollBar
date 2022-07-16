@@ -83,6 +83,7 @@ public abstract class MaterialScrollBar<T> extends RelativeLayout {
     private boolean hiddenByNotEnoughElements = false;
     private float fastScrollSnapPercent = 0;
     private Boolean isDragging = false;
+    private int handleHeight;
 
     //Associated Objects
     RecyclerView recyclerView;
@@ -170,8 +171,10 @@ public abstract class MaterialScrollBar<T> extends RelativeLayout {
     Handle setUpHandle(Context context, Boolean lightOnTouch) {
         handleThumb = new Handle(context, getMode());
         handleThumb.rtl = rtl;
-        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(Utils.getDP(18, this),
-                Utils.getDP(72, this));
+        if (handleHeight == 0) {
+            handleHeight = Utils.getDP(40, this);
+        }
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(Utils.getDP(18, this), handleHeight);
         lp.addRule(rtl ? ALIGN_PARENT_LEFT : ALIGN_PARENT_RIGHT);
         handleThumb.setLayoutParams(lp);
 
@@ -203,6 +206,9 @@ public abstract class MaterialScrollBar<T> extends RelativeLayout {
         }
         if(a.hasValue(R.styleable.MaterialScrollBar_msb_barThickness)) {
             setBarThickness(a.getDimensionPixelSize(R.styleable.MaterialScrollBar_msb_barThickness, 0));
+        }
+        if(a.hasValue(R.styleable.MaterialScrollBar_msb_handleHeight)) {
+            setHandleHeight(a.getDimensionPixelSize(R.styleable.MaterialScrollBar_msb_handleHeight, 0));
         }
         if(a.hasValue(R.styleable.MaterialScrollBar_msb_rightToLeft)) {
             setRightToLeft(a.getBoolean(R.styleable.MaterialScrollBar_msb_rightToLeft, false));
@@ -317,7 +323,8 @@ public abstract class MaterialScrollBar<T> extends RelativeLayout {
 
         if(!isInEditMode()) {
             scrollUtils.scrollHandleAndIndicator();
-            if(hiddenByNotEnoughElements = (scrollUtils.getAvailableScrollHeight() <= 0)) {
+            hiddenByNotEnoughElements = scrollUtils.getAvailableScrollHeight() <= 0;
+            if(hiddenByNotEnoughElements) {
                 handleTrack.setVisibility(GONE);
                 handleThumb.setVisibility(GONE);
             } else {
@@ -632,6 +639,19 @@ public abstract class MaterialScrollBar<T> extends RelativeLayout {
         layoutParams = (LayoutParams) getLayoutParams();
         layoutParams.width = thickness;
         setLayoutParams(layoutParams);
+
+        return (T)this;
+    }
+
+    public T setHandleHeight(final int height) {
+        if(!attached) {
+            onAttach.add(() -> setHandleHeight(height));
+            return (T) this;
+        }
+        handleHeight = height;
+        LayoutParams layoutParams = (LayoutParams) handleThumb.getLayoutParams();
+        layoutParams.height = height;
+        handleThumb.setLayoutParams(layoutParams);
 
         return (T)this;
     }

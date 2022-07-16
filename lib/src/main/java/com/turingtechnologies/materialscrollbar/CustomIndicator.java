@@ -26,7 +26,8 @@ import android.graphics.Paint;
 @SuppressLint("ViewConstructor")
 public class CustomIndicator extends Indicator<ICustomAdapter, CustomIndicator> {
 
-    private int textSize = 25;
+    private int textSize = 24;
+    private final int indicatorHeight = 60;
 
     public CustomIndicator(Context context) {
         super(context, ICustomAdapter.class);
@@ -42,8 +43,8 @@ public class CustomIndicator extends Indicator<ICustomAdapter, CustomIndicator> 
         Paint paint = new Paint();
         paint.setTextSize(textSize);
         int width = Utils.getDP((int) paint.measureText(text), context) + Utils.getDP(30, context);
-        if(width < Utils.getDP(75, context)) {
-            width = Utils.getDP(75, context);
+        if(width < Utils.getDP(indicatorHeight, context)) {
+            width = Utils.getDP(indicatorHeight, context);
         }
         layoutParams.width = width;
         setLayoutParams(layoutParams);
@@ -52,7 +53,7 @@ public class CustomIndicator extends Indicator<ICustomAdapter, CustomIndicator> 
 
     @Override
     protected int getIndicatorHeight() {
-        return 75;
+        return indicatorHeight;
     }
 
     @Override

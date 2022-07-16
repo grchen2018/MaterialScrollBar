@@ -20,7 +20,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.view.View;
 
@@ -28,8 +27,8 @@ import android.view.View;
 public class Handle extends View {
 
     final int WIDTH = Utils.getDP(8, this);
-    RectF handleArc;
-    RectF handleHold;
+    final RectF handleArc = new RectF();
+    final RectF handleHold = new RectF();
     Paint p = new Paint();
     Integer mode;
     boolean expanded = false;
@@ -79,20 +78,20 @@ public class Handle extends View {
             makeRect();
         } else {
             if(rtl) {
-                handleHold = new RectF(new Rect(getLeft(), getTop(), getRight() - WIDTH / 2 - Utils.getDP(1, this), getBottom()));
+                handleHold.set(getLeft(), getTop(), getRight() - WIDTH / 2 - Utils.getDP(1, this), getBottom());
             } else {
-                handleHold = new RectF(new Rect(getLeft() + WIDTH / 2 + Utils.getDP(1, this), getTop(), getRight(), getBottom()));
+                handleHold.set(getLeft() + WIDTH / 2 + Utils.getDP(1, this), getTop(), getRight(), getBottom());
             }
         }
     }
 
     private void makeRect() {
         if(rtl) {
-            handleArc = new RectF(new Rect(getRight() - WIDTH,getTop(),getRight(),getBottom()));
-            handleHold = new RectF(new Rect(getLeft(), getTop(), getRight() - WIDTH / 2, getBottom()));
+            handleArc.set(getRight() - WIDTH,getTop(),getRight(),getBottom());
+            handleHold.set(getLeft(), getTop(), getRight() - WIDTH / 2, getBottom());
         } else {
-            handleArc = new RectF(new Rect(getLeft(),getTop(),getLeft() + WIDTH,getBottom()));
-            handleHold = new RectF(new Rect(getLeft() + WIDTH / 2, getTop(), getRight(), getBottom()));
+            handleArc.set(getLeft(),getTop(),getLeft() + WIDTH,getBottom());
+            handleHold.set(getLeft() + WIDTH / 2, getTop(), getRight(), getBottom());
         }
     }
 

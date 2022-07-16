@@ -37,17 +37,17 @@ public class AlphabetIndicator extends Indicator<INameableAdapter, AlphabetIndic
 
     @Override
     protected int getIndicatorHeight() {
-        return 75;
+        return 60;
     }
 
     @Override
     protected int getIndicatorWidth() {
-        return 75;
+        return 60;
     }
 
     @Override
     protected int getTextSize() {
-        return 40;
+        return 24;
     }
 
 }

@@ -78,7 +78,7 @@ public class DateAndTimeIndicator extends Indicator<IDateableAdapter, DateAndTim
 
     @Override
     protected int getIndicatorHeight() {
-        return 75;
+        return 60;
     }
 
     @Override
@@ -108,7 +108,7 @@ public class DateAndTimeIndicator extends Indicator<IDateableAdapter, DateAndTim
 
     @Override
     protected int getTextSize() {
-        return 28;
+        return 24;
     }
 
 }

@@ -19,6 +19,7 @@ package com.turingtechnologies.materialscrollbar;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.ViewGroup;
@@ -82,6 +83,10 @@ public abstract class Indicator<T, U extends Indicator> extends RelativeLayout{
         }
 
         ViewCompat.setBackground(this, ContextCompat.getDrawable(context, rtl ? R.drawable.indicator_ltr : R.drawable.indicator));
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            setElevation(Utils.getDP(4, this));
+        }
 
         LayoutParams lp = new LayoutParams(Utils.getDP(getIndicatorWidth(), this), Utils.getDP(getIndicatorHeight(), this));
         lp = refreshMargins(lp);

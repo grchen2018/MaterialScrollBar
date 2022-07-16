@@ -54,13 +54,12 @@ class ScrollingUtilities {
 
     void scrollHandleAndIndicator() {
         int scrollBarY;
-        getCurScrollState();
         if(customScroller != null) {
             constant = customScroller.getDepthForItem(materialScrollBar.recyclerView.getChildAdapterPosition(materialScrollBar.recyclerView.getChildAt(0)));
         } else {
             constant = scrollPosState.rowHeight * scrollPosState.rowIndex;
         }
-        constant += + materialScrollBar.recyclerView.getPaddingTop();
+        constant += materialScrollBar.recyclerView.getPaddingTop();
         scrollBarY = (int) getScrollPosition();
         materialScrollBar.handleThumb.setY(scrollBarY);
         materialScrollBar.handleThumb.invalidate();

@@ -26,6 +26,7 @@
         <attr name="msb_handleOffColor" format="color|reference"/>
         <attr name="msb_textColor" format="color|reference"/>
         <attr name="msb_barThickness" format="dimension|reference"/>
+        <attr name="msb_handleHeight" format="dimension|reference"/>
         <attr name="msb_rightToLeft" format="boolean|reference"/>
         <attr name="msb_scrollMode" format="enum">
             <enum name="firstVisible" value="0"/>
