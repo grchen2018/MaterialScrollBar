@@ -268,8 +268,6 @@ public abstract class MaterialScrollBar<T> extends RelativeLayout {
 
         identifySwipeRefreshParents();
 
-        checkCustomScrolling();
-
         for(int i = 0; i < onAttach.size(); i++) {
             onAttach.get(i).run();
         }
@@ -396,12 +394,6 @@ public abstract class MaterialScrollBar<T> extends RelativeLayout {
 
     //CHAPTER III - CUSTOMISATION METHODS
 
-    private void checkCustomScrollingInterface() {
-        if((recyclerView.getAdapter() instanceof  ICustomScroller)) {
-            scrollUtils.customScroller = (ICustomScroller) recyclerView.getAdapter();
-        }
-    }
-
     /**
      * With very long lists, it may be advantageous to put a buffer on the drag bar to give the
      * user some time to actually see the scroll handle and the content. This will make the
@@ -414,25 +406,6 @@ public abstract class MaterialScrollBar<T> extends RelativeLayout {
     public T setFastScrollSnapPercent(float snapPercent) {
         fastScrollSnapPercent = snapPercent;
         return (T)this;
-    }
-
-    /**
-     * The scrollBar should attempt to use dev provided scrolling logic and not default logic.
-     *
-     * The adapter must implement {@link ICustomScroller}.
-     */
-    private void checkCustomScrolling() {
-        if(ViewCompat.isAttachedToWindow(this)) {
-            checkCustomScrollingInterface();
-        } else {
-            addOnLayoutChangeListener(new OnLayoutChangeListener() {
-                @Override
-                public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                    MaterialScrollBar.this.removeOnLayoutChangeListener(this);
-                    checkCustomScrollingInterface();
-                }
-            });
-        }
     }
 
     /**

@@ -28,15 +28,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
  */
 class ScrollingUtilities {
 
-    private MaterialScrollBar materialScrollBar;
+    private final MaterialScrollBar materialScrollBar;
 
     ScrollingUtilities(MaterialScrollBar msb) {
         materialScrollBar = msb;
     }
 
-    ICustomScroller customScroller;
-
-    private ScrollPositionState scrollPosState = new ScrollPositionState();
+    private final ScrollPositionState scrollPosState = new ScrollPositionState();
 
     private int constant;
 
@@ -52,8 +50,16 @@ class ScrollingUtilities {
         private int indicatorPosition;
     }
 
+    private ICustomScroller getCustomScroller() {
+        if (materialScrollBar.recyclerView.getAdapter() instanceof ICustomScroller) {
+            return (ICustomScroller) (materialScrollBar.recyclerView.getAdapter());
+        }
+        return null;
+    }
+
     void scrollHandleAndIndicator() {
         int scrollBarY;
+        ICustomScroller customScroller = getCustomScroller();
         if(customScroller != null) {
             constant = customScroller.getDepthForItem(materialScrollBar.recyclerView.getChildAdapterPosition(materialScrollBar.recyclerView.getChildAt(0)));
         } else {
@@ -111,6 +117,7 @@ class ScrollingUtilities {
     int scrollToPositionAtProgress(float touchFraction) {
         int priorPosition = materialScrollBar.recyclerView.computeVerticalScrollOffset();
         int exactItemPos;
+        ICustomScroller customScroller = getCustomScroller();
         if(customScroller == null) {
             int spanCount = 1;
             if(materialScrollBar.recyclerView.getLayoutManager() instanceof GridLayoutManager) {
@@ -146,6 +153,7 @@ class ScrollingUtilities {
     int getAvailableScrollHeight() {
         int visibleHeight = materialScrollBar.recyclerView.getHeight();
         int scrollHeight;
+        ICustomScroller customScroller = getCustomScroller();
         if(customScroller != null) {
             scrollHeight = materialScrollBar.recyclerView.getPaddingTop() + customScroller.getTotalDepth() + materialScrollBar.recyclerView.getPaddingBottom();
         } else {
