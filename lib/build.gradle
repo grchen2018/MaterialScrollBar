@@ -1,38 +1,50 @@
 apply plugin: 'com.android.library'
 
 def libVersion = '13.4.1'
+def gradleVersion = gradle.gradleVersion
+def gradleVersionAbove5_1_0 = (GradleVersion.version(gradleVersion) <=> GradleVersion.version("5.1.0")) >= 0
 
 android {
-    compileSdkVersion 33
-    buildToolsVersion '33.0'
-
+    namespace "com.turingtechnologies.materialscrollbar"
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 33
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        compileSdk rootProject.ext.compileSdk
+        buildToolsVersion = rootProject.ext.buildToolsVersion
+
         versionName libVersion
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility rootProject.ext.javaVersion
+        targetCompatibility rootProject.ext.javaVersion
     }
 }
 
 // build a jar with source files
-task sourcesJar(type: Jar) {
+tasks.register('sourcesJar', Jar) {
     from android.sourceSets.main.java.srcDirs
-    classifier = 'sources'
+    if (gradleVersionAbove5_1_0) {
+        setArchiveClassifier("sources")
+    } else {
+        classifier = 'sources'
+    }
 }
 
-task javadoc(type: Javadoc) {
-    failOnError  false
+tasks.register('javadoc', Javadoc) {
+    failOnError false
     source = android.sourceSets.main.java.sourceFiles
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
     classpath += configurations.implementation
 }
 
 // build a jar with javadoc
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
+tasks.register('javadocJar', Jar) {
+    dependsOn javadoc
+    if (gradleVersionAbove5_1_0) {
+        setArchiveClassifier("sources")
+    } else {
+        classifier = 'javadoc'
+    }
     from javadoc.destinationDir
 }
 
@@ -42,8 +54,8 @@ artifacts {
 }
 
 dependencies {
-    implementation 'androidx.recyclerview:recyclerview:1.2.1'
-    implementation 'com.google.android.material:material:1.7.0'
+    implementation 'androidx.recyclerview:recyclerview:1.3.0'
+    implementation 'com.google.android.material:material:1.10.0'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 }
 repositories {
