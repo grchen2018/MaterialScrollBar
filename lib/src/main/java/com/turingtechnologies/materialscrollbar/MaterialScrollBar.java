@@ -101,6 +101,8 @@ public abstract class MaterialScrollBar<T> extends RelativeLayout {
     ScrollMode scrollMode;
     float currentScrollPercent = 0F;
 
+    private OnDragStateListener onDragStateListener;
+
     //CHAPTER I - INITIAL SETUP
 
     //Programmatic constructor
@@ -780,6 +782,9 @@ public abstract class MaterialScrollBar<T> extends RelativeLayout {
         }
 
         isDragging = true;
+        if (onDragStateListener != null) {
+            onDragStateListener.onDragStateChanged(true);
+        }
     }
 
     protected void onUp() {
@@ -799,6 +804,13 @@ public abstract class MaterialScrollBar<T> extends RelativeLayout {
         }
 
         isDragging = false;
+        if (onDragStateListener != null) {
+            onDragStateListener.onDragStateChanged(false);
+        }
+    }
+
+    public void setOnDragStateListener(OnDragStateListener onDragStateListener) {
+        this.onDragStateListener = onDragStateListener;
     }
 
     //Tests to ensure that the touch is on the handleThumb depending on the user preference
@@ -825,6 +837,10 @@ public abstract class MaterialScrollBar<T> extends RelativeLayout {
                 }
             }
         }
+    }
+
+    public interface OnDragStateListener {
+        void onDragStateChanged(boolean dragging);
     }
 
     enum ScrollMode {
